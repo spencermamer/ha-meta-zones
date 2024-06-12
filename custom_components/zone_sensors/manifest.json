@@ -1,0 +1,11 @@
+
+{
+  "domain": "zone_sensors",
+  "name": "Zone Sensors",
+  "version": "1.0",
+  "config_flow": true,
+  "documentation": "https://github.com/your-repo/zone_sensors",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@your-github-username"]
+}
