@@ -1,8 +1,8 @@
-
 import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
+from homeassistant.helpers import area_registry as ar
 from .const import DOMAIN, CONF_METAZONES, CONF_LABELS
 
 _LOGGER = logging.getLogger(__name__)
@@ -19,8 +19,9 @@ class ZoneSensorsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.debug(f"Creating entry with user input: {user_input}")
             return self.async_create_entry(title=user_input["metazone_name"], data=user_input)
 
-        areas = self.hass.helpers.area_registry.async_get_areas()
-        area_labels = {area.name: area.name for area in areas}
+        area_reg = await ar.async_get_registry(self.hass)
+        areas = area_reg.areas
+        area_labels = {area.name: area.name for area in areas.values()}
         _LOGGER.debug(f"Available area labels: {area_labels}")
 
         schema = vol.Schema({
@@ -54,8 +55,9 @@ class ZoneSensorsOptionsFlow(config_entries.OptionsFlow):
             _LOGGER.debug(f"Updating entry with user input: {user_input}")
             return self.async_create_entry(title="", data=user_input)
 
-        areas = self.hass.helpers.area_registry.async_get_areas()
-        area_labels = {area.name: area.name for area in areas}
+        area_reg = await ar.async_get_registry(self.hass)
+        areas = area_reg.areas
+        area_labels = {area.name: area.name for area in areas.values()}
         _LOGGER.debug(f"Available area labels for options: {area_labels}")
 
         schema = vol.Schema({
